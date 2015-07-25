@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6e3352af90664794ae9f9360d624b608" Name="Diagram1">
+        <EntityTypeShape EntityType="spark1Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="spark1Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="spark1Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="spark1Model.AspNetUsers" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="spark1Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="spark1Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="spark1Model.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="spark1Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="spark1Model.ReportEntries" Width="1.5" PointX="5.625" PointY="6.25" />
+        <AssociationConnector Association="spark1Model.FK_ReortEntryUser" />
+        <EntityTypeShape EntityType="spark1Model.UserSettings" Width="1.5" PointX="3" PointY="6.125" />
+        <AssociationConnector Association="spark1Model.FK_UserSettingsId" />
+        <AssociationConnector Association="spark1Model.FK_UserDefaultreport" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
