@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+        
+    string panelStyle = User.IsInRole("Admin") ?
+        "panel panel-white no-radius text-center" :
+        "panel panel-disabled no-radius text-center";
+}
+<div id="page-title"
+         class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="mainTitle">Dashboard</h1>
+        </div>
+    </div>
+</div>
+<div class="container-fluid container-fullw">
+    <div class="row">
+        
+        <div class="col-sm-4">
+            <article class="panel panel-white no-radius text-center">
+                <div class="panel-body">
+                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i> </span>
+                    <h2 class="StepTitle">DB Reports</h2>
+                    <p class="text-small">
+                        The DB Reports tool lets you upload and review a database report.
+                    </p>
+                    <p class="cl-effect-1">
+                        <a href="~/Home/DB">
+                            view more
+                        </a>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <div class="col-sm-4">
+            <article class="panel panel-white no-radius text-center">
+                <div class="panel-body">
+                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-pie-chart fa-stack-1x fa-inverse"></i> </span>
+                    <h2 class="StepTitle">Site Analytics</h2>
+                    <p class="text-small">
+                        Take a look at Google Analytics website analytics.
+                    </p>
+                    <p class="cl-effect-1">
+                        <a href="~/Home/Analytics">
+                            view more
+                        </a>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <div class="col-sm-4">
+            <article class="@panelStyle">
+                <div class="panel-body">
+                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
+                    <h2 class="StepTitle">Manage Users</h2>
+                    <p class="text-small">
+                        To manage user accounts, you need to be signed in as the super user.
+                    </p>
+                    <p class="links cl-effect-1">
+                        <a href="~/Users/Manage">
+                            view more
+                        </a>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+<div class="container-fluid container-fullw bg-white">
+    @Html.Partial("AnalyticsChart")
+</div>
+<div class="container-fluid container-fullw">
+    @Html.Partial("DisplayDBReport")
+</div>

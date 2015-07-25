@@ -1,0 +1,126 @@
+﻿@using frontoffice.Models
+@model List<DBEntry>
+
+<section id="page-title"
+         class="padding-bottom-15 padding-top-15">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="mainTitle">Manage DB reports</h1>
+            <p class="mainDescription">Use this screen to manage and review custom DB reports</p>
+        </div>
+    </div>
+</section>
+<div class="container-fluid container-fullw bg-white">
+    <div class="container-fluid container-fullw padding-bottom-10">
+        <div class="panel panel-white no-radius">
+            <div class="panel-heading border-light">
+                <h2 class="panel-title">Reports</h2>
+                <ul class="panel-heading-tabs border-light">
+                    <li>
+                        <a href="/home/adddbentry/"
+                           class="btn btn-wide btn-azure">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        Add report</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped margin-bottom-15">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Entry time</th>
+                            <th>User</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DBEntry entry in Model)
+                        {
+                            <tr>
+                                <td>@entry.Title</td>
+                                <td>@entry.Description</td>
+                                <td>@entry.EntryDateTime</td>
+                                <td>@entry.UserName</td>
+                                <td>
+                                    <div class="cl-effect-1">
+                                        <a data-type="sd_button"
+                                           data-entry_id="@entry.EntryId"
+                                           data-entry-title="@entry.Title"
+                                           href="#"
+                                           data-toggle="modal"
+                                           data-target="#myModal">set default</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid container-fullw bg-white">
+    @Html.Partial("DisplayDBReport")
+</div>
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none">
+    <div class="modal-backdrop fade in"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Set default DB report</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to set <span id="set_def_report_title"
+                                                   style="font-weight:bold"></span> as your default report?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-o" data-dismiss="modal">
+                    Cancel
+                </button>
+                <form action="/home/setdefaultreport/"
+                      method="post"
+                      style="display:inline-block">
+                    <input type="hidden"
+                           id="Report_id_default"
+                           name="Report_id"
+                           value="" />
+                    <input type="hidden"
+                           name="RedirectToDashboard"
+                           value="false" />
+                    <input type="submit"
+                           value="Yes" 
+                           class="btn btn-primary" />
+                </form>
+                <form action="/home/setdefaultreport/"
+                      method="post"
+                      style="display:inline-block">
+                    <input type="hidden"
+                           id="Report_id_w_redirect"
+                           name="Report_id"
+                           value="" />
+                    <input type="hidden"
+                           name="RedirectToDashboard"
+                           value="true" />
+                    <input type="submit"
+                           value="Yes and go to dashboard" 
+                           class="btn btn-primary" />
+                        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('a[data-type="sd_button"]').click(function () {
+            $('#Report_id_default').attr("value", $(this).attr("data-entry_id"));
+            $('#Report_id_w_redirect').attr("value", $(this).attr("data-entry_id"));
+            $('#set_def_report_title').text($(this).attr("data-entry-title"));
+        });
+    })
+</script>

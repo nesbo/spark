@@ -1,0 +1,61 @@
+﻿
+<!-- This is where you define which ViewModel class is passed to the view or from the view to te controller -->
+@model frontoffice.Models.CreateUserViewModel
+@{
+    ViewBag.Title = "Create user";
+}
+
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="mainTitle">Add new user</h1>
+            <span class="mainDescription">Use this admin screen to add new app user.</span>
+        </div>
+    </div>
+</section>
+<div class="container-fluid container-fullw bg-white">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Here starts the form which passes ViewModel to the Create action of Users controller -->
+            @using (Html.BeginForm("Create", "Users", FormMethod.Post, new { @class = "form-register", role = "form" }))
+            { 
+                <fieldset>
+                    <legend>
+                        Create user
+                    </legend>
+                    <p>
+                        Enter account details below:
+                    </p>
+                    <!--Validation summary draws the summary if Model has errors upon submit. -->
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Full name" })
+                    </div>
+                    <div class="form-group">
+                        <span class="input-icon">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+                            <i class="fa fa-envelope"></i>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-icon">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                            <i class="fa fa-lock"></i>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-icon">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm password" })
+                            <i class="fa fa-lock"></i>
+                        </span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary pull-right">
+                            Add user
+                        </button>
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>

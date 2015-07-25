@@ -1,0 +1,28 @@
+﻿@if (!User.Identity.IsAuthenticated)
+{
+    <li class="dropdown current-user">
+        <a href="~/Users/Login">Log in</a>
+    </li>
+}
+else
+{
+    <li class="dropdown current-user">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="~/assets/images/avatar-1.jpg" alt="Peter"> <span class="username">@frontoffice.Helpers.UsersHelper.GetMyUserName()<i class="ti-angle-down"></i></span>
+        </a>
+        <ul class="dropdown-menu dropdown-dark">
+            <li>
+                <a href="pages_user_profile.html">
+                    My Profile
+                </a>
+            </li>
+            <li>
+                <form action="~/Users/LogOff" method="post">
+                    <input type="submit" 
+                           value="Log off"
+                           class="btn btn-block btn-dark-red" />
+                </form>
+            </li>
+        </ul>
+    </li>
+}

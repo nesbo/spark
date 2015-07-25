@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title - Spark</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+    
+    <link rel="stylesheet" href="~/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/vendor/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/vendor/themify-icons/themify-icons.min.css">
+    
+    <link href="~/vendor/animate.css/animate.min.css" rel="stylesheet" media="screen">
+    <link href="~/vendor/perfect-scrollbar/perfect-scrollbar.min.css" rel="stylesheet" media="screen">
+    <link href="~/vendor/switchery/switchery.min.css" rel="stylesheet" media="screen">
+    
+    <link rel="stylesheet" href="~/Content/style.css">
+    <link rel="stylesheet" href="~/assets/css/styles.css">
+    <link rel="stylesheet" href="~/assets/css/plugins.css">
+    <link rel="stylesheet" href="~/assets/css/themes/theme-1.css" id="skin_color" />
+
+            
+</head>
+<body>
+    <div id="app" class="app-navbar-fixed app-sidebar-fixed">
+        <div class="sidebar app-aside" id="sidebar">
+                <div class="sidebar-container">
+                    <nav>
+                        <div class="navbar-title">
+                            <span>Site navigation</span>
+                        </div>
+                        <ul class="main-navigation-menu">
+                            <li>
+                                <a href="~/">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <i class="ti-home"></i>
+                                        </div>
+                                        <div class="item-inner">
+                                            <span class="title"> Dashboard </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Home/Analytics">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <i class="ti-pie-chart"></i>
+                                        </div>
+                                        <div class="item-inner">
+                                            <span class="title"> Analytics </span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Home/DB">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <i class="ti-bar-chart"></i>
+                                        </div>
+                                        <div class="item-inner">
+                                            <span class="title"> DB Report </span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                            </li>
+                        </ul>
+                        @Html.Partial("AdminSiteNav")
+                    </nav>
+                </div>
+            </div>
+        <div class="app-content">
+            <header class="navbar navbar-default navbar-static-top">
+                <!-- start: NAVBAR HEADER -->
+                <div class="navbar-header">
+                    <a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg" data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
+                        <i class="ti-align-justify"></i>
+                    </a>
+                    <a class="navbar-brand" href="~/">
+                        SPARK APP
+                    </a>
+                    <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
+                        <i class="ti-align-justify"></i>
+                    </a>
+                    <a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <i class="ti-view-grid"></i>
+                    </a>
+                </div>
+                <!-- end: NAVBAR HEADER -->
+                <!-- start: NAVBAR COLLAPSE -->
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-right" style="height: auto;">
+                        <!-- start: USER OPTIONS DROPDOWN -->
+                        @Html.Partial("UserDropDownBox")
+                        <!-- end: USER OPTIONS DROPDOWN -->
+                    </ul>
+                    <!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+                    <div class="close-handle visible-xs-block menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                        <div class="arrow-left"></div>
+                        <div class="arrow-right"></div>
+                    </div>
+                    <!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+                </div>
+                <!-- <a class="dropdown-off-sidebar" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">
+                    &nbsp;
+                </a> -->
+                <!-- end: NAVBAR COLLAPSE -->
+            </header>
+            <div class="main-content">
+                <div class="wrap-content container" id="container">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/vendor/modernizr/modernizr.js"></script>
+    <script src="~/vendor/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="~/vendor/switchery/switchery.min.js"></script>
+    
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/index.js"></script>
+    
+    <script>
+			jQuery(document).ready(function() {
+			    Main.init();
+			    Index.init();
+			});
+    </script>
+</body>
+</html>

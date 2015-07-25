@@ -1,0 +1,7 @@
+﻿table h4, table h3 {
+    display:block;
+    text-align:center;
+    padding:8px;
+    margin:0;
+    vertical-align:middle;
+}

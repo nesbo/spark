@@ -1,0 +1,59 @@
+﻿@using frontoffice.Models;
+@using frontoffice.Helpers;
+
+@{
+    ViewBag.Title = "Manage users";
+    List<UserHelper> users = UsersHelper.GetAllUsers();
+}
+<section id="page-title"
+         class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="mainTitle">Manage app users</h1>
+            <span class="mainDescription">Use this admin screen to manage all app user accounts.</span>
+        </div>
+    </div>
+         
+</section>
+<div class="container-fluid container-fullw padding-bottom-10">
+    <div class="panel panel-white no-radius">
+        <div class="panel-heading border-light">
+            <h2 class="panel-title">Users</h2>
+            <ul class="panel-heading-tabs border-light" >
+                <li>
+                    <a href="~/Users/Create"
+                       class="btn btn-wide btn-azure">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        Add user</a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-hover margin-bottom-15">
+                <thead>
+                    <tr>
+                        <th>Full name</th>
+                        <th class="center">Role</th>
+                        <th class="center">Other</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (UserHelper user in users)
+                    {
+                        <tr>
+                            <td><span>@user.UserName</span></td>
+                            <td class="center"><span>@user.UserRole</span></td>
+                            <td class="center">
+                                <div class="cl-effect-1">
+                                    <a href="">
+                                        view more
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

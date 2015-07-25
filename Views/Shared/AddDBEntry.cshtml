@@ -1,0 +1,53 @@
+﻿@model frontoffice.Models.AddDBEntryViewModel
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="mainTitle">Add new DB report</h1>
+            <span class="mainDescription">Use this admin screen to upload new DB report.</span>
+        </div>
+    </div>
+</section>
+<div class="container-fluid container-fullw bg-white">
+    @using (Html.BeginForm("adddbentry", "home", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "fileupload" }))
+    {
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <fieldset class="col-md-8">
+            <legend>
+                Add DB entry
+            </legend>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="text"
+                               data-val="true"
+                               data-val-required="Report title must be entered"
+                               name="Title"
+                               id="Title"
+                               class="form-control" />
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <textarea class="form-control"
+                                  id="Description"
+                                  name="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="padding-top-15 text-right">
+                <input type="File"
+                       name="File" />
+            </div>
+            <div class="text-right padding-top-15">
+                <input type="submit"
+                       class="btn btn-azure btn-file"
+                       value="Add report" />
+            </div>
+        </fieldset>
+    </div>
+    }
+</div>

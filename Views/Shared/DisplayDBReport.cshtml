@@ -1,0 +1,421 @@
+﻿@using System.Data;
+@using frontoffice.Helpers;
+@using frontoffice.Models;
+
+@{
+    DataTable dataSource = (DataTable)Context.Session["Data"];
+    
+    IEnumerable<IGrouping<string, DataRow>> countryGroups =
+        dataSource
+        .Rows
+        .Cast<DataRow>()
+        .GroupBy(g => g.Field<string>(1));
+
+    List<string> countries = new List<string>();
+    foreach (IGrouping<string, DataRow> countryGroup in countryGroups)
+    { 
+        countries.Add(countryGroup.FirstOrDefault().Field<string>(1));
+    }
+    //countries = countries.OrderBy(c => c).ToList();
+    
+    IEnumerable<IGrouping<string, DataRow>> spvGroups =
+        dataSource
+        .Rows
+        .Cast<DataRow>()
+        .GroupBy(g => g.Field<string>(3));
+    List<string> spvs = new List<string>();
+    foreach (IGrouping<string, DataRow> spvGroup in spvGroups)
+    { 
+        spvs.Add(spvGroup.FirstOrDefault().Field<string>(3));
+    }
+    spvs = spvs.OrderBy(sp => sp).ToList();
+
+    List<decimal> ovrSum1 = new List<decimal>(),
+        ovrSum2 = new List<decimal>(),
+        ovrSum3 = new List<decimal>(),
+        ovrSum4 = new List<decimal>(),
+        ovrSum5 = new List<decimal>(),
+        ovrGMX = new List<decimal>();
+
+    List<int> ovrPerc1 = new List<int>(),
+        ovrPerc2 = new List<int>(),
+        ovrPerc3 = new List<int>(),
+        ovrBooks1 = new List<int>(),
+        ovrBooks2 = new List<int>(),
+        ovrBooks3 = new List<int>();
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        @foreach (string country in countries)
+        {
+            <tr>
+                <th><h3>@country</h3></th>
+                <th colspan="2"><h4>February</h4></th>
+                <th colspan="2"><h4>Last 6 month</h4></th>
+                <th colspan="2"><h4>To date</h4></th>
+                <th colspan="3"><h4>Books</h4></th>
+                <th colspan="4"></th>
+            </tr>
+            <tr>
+                <th>SP</th>
+                <th>Gross cash</th>
+                <th style="width:100px">vs forecast</th>
+                <th>Gross cash</th>
+                <th style="width:100px">vs forecast</th>
+                <th>Gross cash</th>
+                <th style="width:100px">vs forecast</th>
+                <th style="width:50px">Below</th>
+                <th style="width:50px">Par</th>
+                <th style="width:50px">Over</th>
+                <th>ERC</th>
+                <th>Spend</th>
+                <th style="width:90px">Gross money - X</th>
+                <th style="width:100px">Budget IRR</th>
+            </tr>
+          
+            IEnumerable<DataRow> spvsInCountry = spvGroups
+                .Where(sp => sp.FirstOrDefault().Field<string>(1) == country)
+                .Select(sp => sp.FirstOrDefault());
+
+            List<decimal> sum1 = new List<decimal>(),
+                sum2 = new List<decimal>(),
+                sum3 = new List<decimal>(),
+                sum4 = new List<decimal>(),
+                sum5 = new List<decimal>(),
+                gmxAvg = new List<decimal>();
+
+
+            List<int> percs1 = new List<int>(),
+                    percs2 = new List<int>(),
+                    percs3 = new List<int>(),
+                    booksB = new List<int>(),
+                    booksO = new List<int>(),
+                    booksP = new List<int>();
+
+            foreach (DataRow row in spvsInCountry)
+            {
+                string sp = row.Field<string>(3);
+
+                IEnumerable<DataRow> booksBelow = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(bu => bu.Field<string>(3) == sp &&
+                        bu.Field<string>(1) == country &&
+                        bu.Field<string>(18).ToLower() == "below"),
+                booksPar = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(bu => bu.Field<string>(3) == sp &&
+                        bu.Field<string>(1) == country &&
+                        bu.Field<string>(18).ToLower() == "par"),
+                booksOver = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(bu => bu.Field<string>(3) == sp &&
+                        bu.Field<string>(1) == country &&
+                        bu.Field<string>(18).ToLower() == "over");
+
+                decimal gross = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(4) == "NULL" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(4)))
+                    .Sum(),
+                gross2 = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(6) == "NULL" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(6)))
+                    .Sum(),
+                gross3 = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(14) == "NULL" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(14)))
+                    .Sum(),
+                erc = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(17) == "NULL" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(17)))
+                    .Sum(),
+                spend = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(19) == "NULL" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(19)))
+                    .Sum(),
+                budget = dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(21) == "NULL" ||
+                        s.Field<string>(21) == "#N/A" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(21)))
+                    .Sum();
+
+                sum1.Add(gross);
+                sum2.Add(gross2);
+                sum3.Add(gross3);
+                sum4.Add(erc);
+                sum5.Add(spend);
+
+                decimal vsForecastDec = (gross /
+                    dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(5).Trim().ToLower() == "null" || s.Field<string>(5).Trim() == "-" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(5)))
+                    .Sum() - 1)
+                    * 100,
+                vsForecast2Dec = (gross2 /
+                    dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(7).Trim().ToLower() == "null" || s.Field<string>(7).Trim() == "-" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(7)))
+                    .Sum() - 1)
+                    * 100,
+                vsForecast3Dec = (gross3 /
+                    dataSource
+                    .Rows
+                    .Cast<DataRow>()
+                    .Where(s => s.Field<string>(3) == sp && s.Field<string>(1) == country)
+                    .Select(s => s.Field<string>(16).Trim().ToLower() == "null" || s.Field<string>(16).Trim() == "-" ?
+                        (decimal)0 :
+                        decimal.Parse(s.Field<string>(16)))
+                    .Sum() - 1)
+                    * 100,
+                gmX = decimal.Round((gross3 + erc) / spend, 2),
+                budgetIRRDec = (budget / spend) * 100;
+
+                int vsForecast = Convert.ToInt32(vsForecastDec),
+                    vsForecast2 = Convert.ToInt32(vsForecast2Dec),
+                    vsForecast3 = Convert.ToInt32(vsForecast3Dec),
+                    booksBelowCnt = booksBelow.Distinct().Count(),
+                    booksParCnt = booksPar.Distinct().Count(),
+                    booksOverCnt = booksOver.Distinct().Count(),
+                    budgetIrr = Convert.ToInt32(budgetIRRDec);
+
+                percs1.Add(vsForecast);
+                percs2.Add(vsForecast2);
+                percs3.Add(vsForecast3);
+                booksB.Add(booksBelowCnt);
+                booksP.Add(booksParCnt);
+                booksO.Add(booksOverCnt);
+                gmxAvg.Add(gmX);
+
+                string grossText = string.Format("£{0}K", gross.ToString("#,###,")),
+                    gross2Text = string.Format("£{0}K", gross2.ToString("#,###,")),
+                    gross3Text = string.Format("£{0}K", gross3.ToString("#,###,")),
+                    progressBarStyle = UIHelper.GetProgressBarCSSStyle(vsForecast),
+                    progressBar2Style = UIHelper.GetProgressBarCSSStyle(vsForecast2),
+                    progressBar3Style = UIHelper.GetProgressBarCSSStyle(vsForecast3),
+                    progressBar4Style = UIHelper.GetProgressBarCSSStyle(budgetIrr),
+                    ercText = string.Format("£{0}K", erc.ToString("#,###,")),
+                    spendText = string.Format("£{0}K", spend.ToString("#,###,"));
+
+                <tr>
+                    <td>@sp</td>
+                    <td>@grossText</td>
+                    <td>
+                        <div class="progress center">
+                            <div role="progressbar"
+                                 style="@progressBarStyle"
+                                 title="@vsForecast%"
+                                 aria-valuenow="@vsForecast">
+                                @vsForecast%
+                            </div>
+                        </div>
+                    </td>
+                    <td>@gross2Text</td>
+                    <td>
+                        <div class="progress center">
+                            <div role="progressbar"
+                                 style="@progressBar2Style"
+                                 title="@vsForecast2%"
+                                 aria-valuenow="@vsForecast2">
+                                @vsForecast2%
+                            </div>
+                        </div>
+                    </td>
+                    <td>@gross3Text</td>
+                    <td>
+                        <div class="progress center">
+                            <div role="progressbar"
+                                 style="@progressBar3Style"
+                                 title="@vsForecast3%"
+                                 aria-valuenow="@vsForecast3">
+                                @vsForecast3%
+                            </div>
+                        </div>
+                    </td>
+                    <td>@booksBelowCnt</td>
+                    <td>@booksParCnt</td>
+                    <td>@booksOverCnt</td>
+                    <td>@ercText</td>
+                    <td>@spendText</td>
+                    <td>@gmX.ToString()</td>
+                    <td>
+                        <div class="progress center">
+                            <div role="progressbar"
+                                 style="@progressBar4Style"
+                                 title="@budgetIrr%"
+                                 aria-valuenow="@budgetIrr">
+                                @budgetIrr%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            }
+            int avgPerc1 = Convert.ToInt32(percs1.Average()),
+                avgPerc2 = Convert.ToInt32(percs2.Average()),
+                avgPerc3 = Convert.ToInt32(percs3.Average());
+
+            ovrPerc1.Add(avgPerc1);
+            ovrPerc2.Add(avgPerc2);
+            ovrPerc3.Add(avgPerc3);
+
+            string avgProg1Style = UIHelper.GetProgressBarCSSStyle(avgPerc1),
+                avgProg2Style = UIHelper.GetProgressBarCSSStyle(avgPerc2),
+                avgProg3Style = UIHelper.GetProgressBarCSSStyle(avgPerc3);
+
+            decimal gmXAverage = decimal.Round(gmxAvg.Average(), 2);
+
+            ovrGMX.Add(gmXAverage);
+
+            ovrSum1.Add(sum1.Sum());
+            ovrSum2.Add(sum2.Sum());
+            ovrSum3.Add(sum3.Sum());
+            ovrSum4.Add(sum4.Sum());
+            ovrSum5.Add(sum5.Sum());
+
+            ovrBooks1.Add(booksB.Sum());
+            ovrBooks2.Add(booksP.Sum());
+            ovrBooks3.Add(booksO.Sum());
+
+            <tr class="info">
+                <th>@country</th>
+                <th>
+                    £@sum1.Sum().ToString("#,###,")K
+                </th>
+                <th>
+                    <div class="progress center">
+                        <div role="progressbar"
+                             style="@avgProg1Style"
+                             title="@avgPerc1%"
+                             aria-valuenow="@avgPerc1">
+                            @avgPerc1%
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    £@sum2.Sum().ToString("#,###,")K
+                </th>
+                <th>
+                    <div class="progress center">
+                        <div role="progressbar"
+                             style="@avgProg2Style"
+                             title="@avgPerc2%"
+                             aria-valuenow="@avgPerc2">
+                            @avgPerc2%
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    £@sum3.Sum().ToString("#,###,")K
+                </th>
+                <th>
+                    <div class="progress center">
+                        <div role="progressbar"
+                             style="@avgProg3Style"
+                             title="@avgPerc3%"
+                             aria-valuenow="@avgPerc3">
+                            @avgPerc3%
+                        </div>
+                    </div>
+                </th>
+                <th>@booksB.Sum()</th>
+                <th>@booksP.Sum()</th>
+                <th>@booksO.Sum()</th>
+                <th>£@sum4.Sum().ToString("#,###,")K</th>
+                <th>£@sum5.Sum().ToString("#,###,")K</th>
+                <th>@gmXAverage.ToString()</th>
+                <th></th>
+            </tr>
+        }
+        @{
+            int ovrAverage1 = Convert.ToInt32(ovrPerc1.Average()),
+                ovrAverage2 = Convert.ToInt32(ovrPerc2.Average()),
+                ovrAverage3 = Convert.ToInt32(ovrPerc3.Average()),
+                ovrBooksCountB = ovrBooks1.Sum(),
+                ovrBooksCountP = ovrBooks2.Sum(),
+                ovrBooksCountO = ovrBooks3.Sum();
+
+            string ovrProgressStyle1 = UIHelper.GetProgressBarCSSStyle(ovrAverage1),
+                ovrProgressStyle2 = UIHelper.GetProgressBarCSSStyle(ovrAverage2),
+                ovrProgressStyle3 = UIHelper.GetProgressBarCSSStyle(ovrAverage3);
+        
+        <tr class="success">
+            <th>Total</th>
+            <th>£@ovrSum1.Sum().ToString("#,###,")K</th>
+            <th>
+                <div class="progress center">
+                    <div role="progressbar"
+                         style="@ovrProgressStyle1"
+                         title="@ovrAverage1%"
+                         aria-valuenow="@ovrAverage1">
+                        @ovrAverage1%
+                    </div>
+                </div>
+            </th>
+            <th>£@ovrSum2.Sum().ToString("#,###,")K</th>
+            <th>
+                <div class="progress center">
+                    <div role="progressbar"
+                         style="@ovrProgressStyle2"
+                         title="@ovrAverage2%"
+                         aria-valuenow="@ovrAverage2">
+                        @ovrAverage2%
+                    </div>
+                </div>
+            </th>
+            <th>£@ovrSum3.Sum().ToString("#,###,")K</th>
+            <th>
+                <div class="progress center">
+                    <div role="progressbar"
+                         style="@ovrProgressStyle3"
+                         title="@ovrAverage3%"
+                         aria-valuenow="@ovrAverage3">
+                        @ovrAverage3%
+                    </div>
+                </div>
+            </th>
+            <th>@ovrBooksCountB.ToString()</th>
+            <th>@ovrBooksCountP.ToString()</th>
+            <th>@ovrBooksCountO.ToString()</th>
+            <th>£@ovrSum4.Sum().ToString("#,###,")K</th>
+            <th>£@ovrSum5.Sum().ToString("#,###,")K</th>
+            <th>@ovrGMX.Average().ToString("0.00")</th>
+            <th></th>
+        </tr>
+        }
+    </table>
+</div>
